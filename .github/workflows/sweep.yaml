@@ -2,8 +2,6 @@ name: Sweep
 
 on:
   push:
-    branches:
-      - main
     paths:
       - "**sweep.yaml"
       - "**cradio.*"
