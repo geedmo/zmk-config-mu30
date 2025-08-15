@@ -1,227 +1,229 @@
+/*
+ * Copyright (c) 2020 The ZMK Contributors
+ *
+ * SPDX-License-Identifier: MIT
+ */
+
 #include <behaviors.dtsi>
-#include <dt-bindings/zmk/backlight.h>
-#include <dt-bindings/zmk/bt.h>
 #include <dt-bindings/zmk/keys.h>
-#include <dt-bindings/zmk/outputs.h>
+#include <dt-bindings/zmk/bt.h>
 #include <dt-bindings/zmk/rgb.h>
+#include <dt-bindings/zmk/outputs.h>
 
-&caps_word {
-    continue-list = <UNDERSCORE MINUS BSPC DEL N1 N2 N3 N4 N5 N6 N7 N8 N9 N0>;
-};
+#include "../../../zmk-nodefree-config/keypos_def/keypos_34keys.h"
+#include "../../../zmk-nodefree-config/helper.h"
 
-&soft_off {
-    hold-time-ms = <5000>; // Only turn off it the key is held for 5 seconds or longer.
-};
+#define DEFAULT 0
+#define SYM 1
+#define MEDIA 2
+#define FUN 3
+#define NAV 4
+#define NUMPAD 5
+#define WNAV 6
+#define EMAILS 7
+#define ADJUST 8
+#define TNAV 9
 
-// hold-preferred: trigger hold when other key is *pressed*
-//       balanced: trigger hold when other key is *pressed and released*
+/* #define DEFAULT 0 */
+/* #define SYM 1 */
+/* #define NAV 2 */
+/* #define ADJUST 3 */
+/* #define FUN 5 */
+/* #define NUMPAD 6 */
+/* #define NUMWORD 7 */
+/* #define MEDIA 8 */
+/* #define MOUSE 9 */
+/* #define GAME 10 */
+/* #define WNAV 11 */
+/* #define EMAILS 12 */
 
-&mt {
-    flavor = "hold-preferred";
-    tapping-term-ms = <200>;
-    quick-tap-ms = <180>;
-};
+#define XXXXXXX &none
+#define _______ &trans
 
+// Home row mods macros
+#define MALT(k) &hrm LALT k
+#define MSFT(k) &hrm LSHFT k
+#define MCTL(k) &hrm LCTRL k
+#define MGUI(k) &hrm LGUI k
+#define MCS(k) &hrm LC(LSHFT) k
+#define MCA(k) &hrm LC(LALT) k
+#define MHYPR(k) &hrm LS(LC(LA(LGUI))) k
+#define MMEH(k) &hrm LS(LC(LALT)) k
+
+#define SLG(k) &hrm LS(LG(k)) LG(k)
+
+#define HYPR LS(LC(LA(LGUI)))
+#define MEH LS(LC(LALT))
+
+#define CANCEL &mo DEFAULT
+
+#include "./combos.dtsi"
+
+// send string macros
+#define SS_BEHAVIOR(name, macro_bindings) \
+    ZMK_BEHAVIOR(name, macro, \
+        wait-ms = <30>; \
+        tap-ms = <40>; \
+        bindings = <macro_bindings>; \
+    )
+
+// unicode
+ZMK_UNICODE_PAIR(n_tilde,   N0, N0, F, N1,   N0, N0, D, N1)
+
+// tap dance
+ZMK_BEHAVIOR(td_parens, tap_dance,
+    tapping-term-ms = <250>;
+    bindings = <&kp LPAR>, <&kp RPAR>;
+)
+ZMK_BEHAVIOR(td_bracket, tap_dance,
+    tapping-term-ms = <250>;
+    bindings = <&kp LBKT>, <&kp RBKT>;
+)
+ZMK_BEHAVIOR(td_cbrace, tap_dance,
+    tapping-term-ms = <250>;
+    bindings = <&kp LBRC>, <&kp RBRC>;
+)
+ZMK_BEHAVIOR(td_dotcom, tap_dance,
+    tapping-term-ms = <250>;
+    bindings = <&kp DOT>, <&kp COMMA>;
+)
+
+// enable auto repeat on layer-tap
 &lt {
-    flavor = "balanced";
-    tapping-term-ms = <200>;
-    quick-tap-ms = <180>;
+    quick-tap-ms = <200>;
 };
 
+// send string macros
+SS_BEHAVIOR(ss_mailp, &kp M &kp O &kp R &kp A &kp L &kp E &kp S &kp DOT &kp G &kp E &kp R &kp M &kp A &kp N &kp AT &kp G &kp M &kp A &kp I &kp L &kp DOT &kp C &kp O &kp M)
+SS_BEHAVIOR(ss_mail_themicon, &kp T &kp H &kp E &kp M &kp I &kp C &kp O &kp N &kp DOT &kp C &kp O &kp AT &kp G &kp M &kp A &kp I &kp L &kp DOT &kp C &kp O &kp M)
+SS_BEHAVIOR(ss_mail_geedmo, &kp G &kp E &kp E &kp D &kp M &kp O &kp DOT &kp D &kp S &kp AT &kp G &kp M &kp A &kp I &kp L &kp DOT &kp C &kp O &kp M)
+SS_BEHAVIOR(ss_mail_goodb, &kp G &kp O &kp O &kp D &kp F &kp O &kp R &kp T &kp H &kp E &kp B &kp L &kp O &kp O &kp D &kp AT &kp G &kp M &kp A &kp I &kp L &kp DOT &kp C &kp O &kp M)
+SS_BEHAVIOR(ss_mail_mmm, &kp G &kp E &kp R &kp M &kp A &kp N &kp DOT &kp M &kp O &kp R &kp A &kp L &kp E &kp S &kp AT &kp M &kp M &kp M &kp H &kp C &kp DOT &kp C &kp O &kp M)
+SS_BEHAVIOR(ss_mail_sl, &kp G &kp E &kp R &kp M &kp A &kp N &kp DOT &kp M &kp O &kp R &kp A &kp L &kp E &kp S &kp AT &kp S &kp M &kp A &kp R &kp T &kp L &kp O &kp G &kp I &kp X &kp P &kp R &kp DOT &kp C &kp O &kp M)
 
-#define L1(k1) &lt 1 k1
-#define SYM(k1) &lt 1 k1
-#define L2(k1) &lt 2 k1
-#define NAV(k1) &lt 2 k1
-#define NUM(k1) &lt 2 k1
-#define L3(k1) &lt 3 k1
-#define CFG(k1) &lt 3 k1
-
-// Alt when hold,k1 when tap
-#define LAT(k1) &ht LALT k1
-// GUI when hold, k1 when tap
-#define LGT(k1) &ht LGUI k1
-// shift when hold, k1 when tap
-#define ST(k1) &ht LSHFT k1
-// Ctrl when hold, k1 when tap
-#define CT(k1) &ht LCTRL k1
-// rgb
-#define UG(k1) &rgb_ug k1
-
-// hold preferred makes it easier to trigger hold
-#define HOLD_PREFER_GUI(k1) &hp LGUI k1
-
-// Hold GUI + x key press
-#define HG(k1) &kp LG(k1)
-#define ENTER &hp LGUI RET
-
-#define BT(k1) &bt BT_SEL k1
-#define BTC &bt BT_CLR_ALL
-
-#define BOOT &bootloader
-
-//     == layout and key index ==
-//
-// +---------------+---------------+
-// | 0  1  2  3  4 |  5  6  7  8  9|
-// |10 11 12 13 14 | 15 16 17 18 19|
-// |20 21 22 23 24 | 25 26 27 28 29|
-// +--------|30 31 | 32 33|--------+
-//          +------+------+
 / {
-    combos {
-        compatible = "zmk,combos";
-        combo_df_esc {
-            timeout-ms = <50>;
-            key-positions = <12 13>;
-            bindings = <&kp ESC>;
-        };
-        combo_qw_esc {
-            timeout-ms = <50>;
-            key-positions = <0 1>;
-            bindings = <&kp ESC>;
-        };
-
-        combo_vol_down {
-            bindings = <&kp C_VOL_DN>;
-            key-positions = <26 27>;
-        };
-
-        combo_vol_up {
-            bindings = <&kp C_VOL_UP>;
-            key-positions = <27 28>;
-        };
-        combo_caps_word {
-            bindings = <&caps_word>;
-            key-positions = <13 16>;
-        };
-        /* lock { */
-        /*     timeout-ms = <50>; */
-        /*     key-positions = <0 9 20 29>; */
-        /*     bindings = <&to 4>; */
-        /* }; */
-        /* unlock { */
-        /*     timeout-ms = <50>; */
-        /*     key-positions = <1 8 21 28>; */
-        /*     bindings = <&to 0>; */
-        /* }; */
-        /* combo_sticky_gui { */
-        /*     bindings = <&sk LGUI>; */
-        /*     key-positions = <14 24>; */
-        /* }; */
-        /* combo_bspc { */
-        /*     bindings = <&kp BACKSPACE>; */
-        /*     key-positions = <3 4>; */
-        /* }; */
-        /* combo_sticky_ctrl_shift { */
-        /*     bindings = <&sk LC(LSHFT)>; */
-        /*     key-positions = <10 20>; */
-        /* }; */
-        /* combo_layer_3 { */
-        /*     bindings = <&to 3>; */
-        /*     key-positions = <0 9>; */
-        /* }; */
+    macros {
+            ZMK_MACRO(save,
+              wait-ms = <30>;
+              tap-ms = <40>;
+              bindings =  <&macro_tap &kp ESC &kp COLON &kp W &kp RET>;
+            )
     };
 
     behaviors {
-        hp: hold_preferred {
-            label = "HOLD PREFERRED";
+        hrm: homerow_mods {
             compatible = "zmk,behavior-hold-tap";
+            label = "HOMEROW_MODS";
             #binding-cells = <2>;
-            flavor = "hold-preferred";
+            flavor = "tap-preferred";
             tapping-term-ms = <200>;
-            quick-tap-ms = <180>;
+            quick-tap-ms = <200>;
             bindings = <&kp>, <&kp>;
         };
-        ht: hold_tap {
-            label = "TAP_HOLD";
-            compatible = "zmk,behavior-hold-tap";
-            #binding-cells = <2>;
-            flavor = "balanced";
-            tapping-term-ms = <200>;
-            quick-tap-ms = <180>;
-            bindings = <&kp>, <&kp>;
-        };
-        td0: td_0 {
-            compatible = "zmk,behavior-tap-dance";
-            label = "GUI_BACKTICK";
-            #binding-cells = <0>;
-            tapping-term-ms = <200>;
-            bindings = <&kp LG(GRAVE)>;
-        };
-    };
+	};
 
-//############################################################################################################
-// * Having enter on left side to hit action when right hand operate mouse
-//############################################################################################################
+        keymap {
+                compatible = "zmk,keymap";
 
-    keymap {
-        compatible = "zmk,keymap";
-        label = "3x5 keymap";
+                default_layer {
+                        label = "default";
+                        bindings = <
+    XXXXXXX    MALT(W)    &kp E      MGUI(R)      MHYPR(T)   MMEH(Y)   MGUI(U)  &kp I      MALT(O)   XXXXXXX
+    MSFT(A)    &kp S      &kp D      MCTL(F)      &kp G      &kp H     MCTL(J)  &kp K      &kp L     MSFT(P)
+    MCS(Q)     MCA(X)     &kp C      &kp V        &kp B      &kp N     &kp M    &kp COMMA  MCA(DOT)  &kp Z
+                                     &sl SYM      &sl SYM   &lt NAV SPACE   &lt NAV SPACE
+                        >;
+                };
 
-        base {
-            bindings = <
-//+---------+---------+---------+---------+---------+/*  */+---------+---------+---------+---------+---------+
-   &kp Q     &kp W     &kp E     &kp R     LAT(T)    /*  */ &kp Y     &kp U     &kp I     &kp O     &kp P
-//+---------+---------+---------+---------+---------+/*  */+---------+---------+---------+---------+---------+
-   CT(A)     NAV(S)    &kp D     ST(F)     LGT(G)    /*  */ &kp H     ST(J)     &kp K     NUM(L)    CT(SEMI)
-//+---------+---------+---------+---------+---------+/*  */+---------+---------+---------+---------+---------+
-   CFG(Z)    LGT(X)    &kp C     &kp V     &kp B     /*  */ &kp N     &kp M     &kp COMMA &kp DOT   &kp FSLH
-//+---------+---------+---------+---------+---------+/*  */+---------+---------+---------+---------+---------+
-                                 ENTER     NUM(SPACE)/*  */ SYM(BSPC) LAT(TAB)
-                              //================================================
-            >;
+                sym_layer {
+                        label = "sym";
+                        bindings = <
+    _______    &kp AT     &kp HASH   &kp DLLR   &kp PRCNT  &kp CARET  &kp AMPS   &kp ASTRK  &td_parens   _______
+    &kp GRAVE  &kp DQT    _______    &kp EXCL   _______    _______    &kp MINUS  &kp EQUAL  &td_cbrace   &kp SEMI
+    &kp TILDE  &kp SQT    &kp BSLH   &kp PIPE   &sl MEDIA  &sl FUN    &kp UNDER  &kp PLUS   &td_bracket  &kp FSLH
+                                     CANCEL     CANCEL    _______    _______
+                        >;
+                };
+
+                media_layer {
+                        label = "media";
+                        bindings = <
+    _______    _______    _______    &kp C_BRI_UP  _______      _______     _______       _______        _______      _______
+    _______    _______    _______    &kp C_BRI_DN  _______      &kp C_PREV  &kp C_VOL_DN  &kp C_VOL_UP   &kp C_NEXT   &kp C_STOP
+    _______    _______    _______    _______       _______      _______     _______       _______        _______      _______
+                                     &kp C_NEXT    &kp C_NEXT   &kp C_PP    &kp C_PP
+                            >;
+                };
+
+                fun_layer {
+                        label = "fun";
+                        bindings = <
+    XXXXXXX    &kp F1     &kp F2     &kp F3     &kp F4     XXXXXXX    XXXXXXX    &kp K_LOCK  &kp PAUSE_BREAK  XXXXXXX
+    &kp F5     &kp F6     &kp F7     &kp F8     XXXXXXX    XXXXXXX    XXXXXXX    XXXXXXX     &kp PSCRN        &n_tilde
+    &kp F9     &kp F10    &kp F11    &kp F12    XXXXXXX    XXXXXXX    XXXXXXX    XXXXXXX     &kp K_APP        &sk RCTRL
+                                     CANCEL     CANCEL     _______    _______
+                        >;
+                };
+
+                nav_layer {
+                        label = "nav";
+                        bindings = <
+    _______    &kp PG_DN  &kp UP     &kp PG_UP  _______    _______    &kp LC(LS(TAB)) _______    &kp LC(TAB) _______
+    &kp HOME   &kp LEFT   &kp DOWN   &kp RIGHT  &kp END    &kp LEFT   &kp DOWN        &kp UP     &kp RIGHT   _______
+    &mo NAV    _______    _______    _______    _______    &kp INS    &kp HOME        &kp PG_DN  &kp PG_UP   &kp END
+                                     CANCEL     CANCEL     _______    _______
+                           >;
+                };
+
+               numpad_layer  {
+                        label = "numpad";
+                        bindings = <
+    _______    _______   _______   _______   _______   &kp KP_NUMLOCK    &kp KP_N7  &kp KP_N8  &kp KP_N9  _______
+    _______    _______   _______   _______   _______   &kp KP_PLUS       &kp KP_N4  &kp KP_N5  &kp KP_N6  &td_dotcom
+    &to NUMPAD _______   _______   _______   _______   &kp KP_ASTERISK   &kp KP_N1  &kp KP_N2  &kp KP_N3  &kp FSLH
+                                   CANCEL    CANCEL    _______           &kp KP_N0
+                        >;
+                };
+
+               wnav_layer  {
+                        label = "wnav";
+                        bindings = <
+    _______    &kp LA(TAB)    &kp LG(TAB)  _______     _______     SLG(LEFT)  SLG(DOWN)  SLG(UP)   SLG(RIGHT)  _______
+     SLG(N6)   SLG(N4)        SLG(N0)      SLG(N2)     SLG(N8)     SLG(N9)    SLG(N3)    SLG(N1)   SLG(N5)     SLG(N7)
+    _______    _______        _______      _______     _______     _______    _______   _______    _______     _______
+                                           CANCEL      CANCEL      _______    _______
+                            >;
+                };
+
+               emails_layer  {
+                        label = "emails";
+                        bindings = <
+    _______    &ss_mail_geedmo  _______    _______    &ss_mail_themicon  _______   &ss_mailp      _______    _______   _______
+    _______    &ss_mail_sl      _______    _______    &ss_mail_goodb     _______   _______        _______    _______   &ss_mailp
+    _______    _______          _______    _______    _______            _______   &ss_mail_mmm   _______    _______   _______
+                                           _______    _______            _______    _______
+                        >;
+                };
+
+                adjust_layer {
+                        label = "adjust";
+                        bindings = <
+   _______     &rgb_ug RGB_SAI &rgb_ug RGB_HUI &rgb_ug RGB_EFF _______   _______ &bt BT_SEL 0 &bt BT_SEL 1 &bt BT_SEL 2  _______
+   &bootloader &rgb_ug RGB_SAD &rgb_ug RGB_HUD &rgb_ug RGB_EFR _______   _______ &bt BT_SEL 3 &bt BT_SEL 4 _______       &bootloader
+   &sys_reset  &rgb_ug RGB_BRI &rgb_ug RGB_BRD &rgb_ug RGB_TOG _______   _______ &bt BT_CLR   _______      &out OUT_TOG  &sys_reset
+                                               &kp     CAPS    _______   _______ _______
+                        >;
+                };
+
+               tnav_layer  {
+                        label = "tnav";
+                        bindings = <
+    _______    _______        &kp RC(E)   &kp RC(R)   _______    &kp RC(LEFT) &kp RC(DOWN) &kp RC(UP) &kp RC(RIGHT) _______
+    &kp RC(N6) &kp RC(N4)     &kp RC(N0)  &kp RC(N2)  _______    _______      &kp RC(N3)   &kp RC(N1) &kp RC(N5)    &kp RC(N7)
+    _______    &kp RC(X)      _______     &kp RC(N8)  _______    _______      &kp RC(N9)   _______    _______       _______
+                                          CANCEL      CANCEL     _______    _______
+                            >;
+                };
+
         };
-
-        symbols {
-            bindings = <
-//+---------+---------+---------+---------+---------+/*  */+---------+---------+---------+---------+---------+
-   &kp EXCL  &kp AT    &kp HASH  &kp DLLR  &kp PRCNT /*  */ &kp CARET &kp AMPS  &kp STAR  &none     &kp N0
-//+---------+---------+---------+---------+---------+/*  */+---------+---------+---------+---------+---------+
-   &kp DQT   &kp UNDER &kp GRAVE &kp SQT   &kp MINUS /*  */ &kp COLON &kp LPAR  &kp RPAR  &kp LBKT  &kp RBKT
-//+---------+---------+---------+---------+---------+/*  */+---------+---------+---------+---------+---------+
-   &kp BSLH  &kp PIPE  &kp TILDE &kp EQUAL &kp PLUS  /*  */ &kp LBRC  &kp RBRC  &kp LT    &kp GT    &kp QMARK
-//+---------+---------+---------+---------+---------+/*  */+---------+---------+---------+---------+---------+
-                                 &trans    &trans    /*  */ &trans    &trans
-                              //================================================
-            >;
-        };
-
-        numbers {
-            bindings = <
-//+---------+---------+---------+---------+---------+/*  */+---------+---------+---------+---------+---------+
-   &kp N1    &kp N2    &kp N3    &kp SLASH &kp STAR  /*  */ &kp HOME  &kp PG_DN &kp PG_UP &kp END   BT(0)
-//+---------+---------+---------+---------+---------+/*  */+---------+---------+---------+---------+---------+
-   &kp N4    &kp N5    &kp N6    &kp DOT   &kp MINUS /*  */ &kp LEFT  &kp DOWN  &kp UP    &kp RIGHT BT(1)
-//+---------+---------+---------+---------+---------+/*  */+---------+---------+---------+---------+---------+
-   &kp N7    &kp N8    &kp N9    &kp N0    &kp PLUS  /*  */ &none     HG(DOWN)  HG(UP)    &none     BT(2)
-//+---------+---------+---------+---------+---------+/*  */+---------+---------+---------+---------+---------+
-                                 &trans    &trans    /*  */ &trans    &trans
-                              //================================================
-            >;
-        };
-
-        config {
-            bindings = <
-//+---------+---------+---------+------+---------+/*  */+------------+---------+---------+-----------+-----------+
-   BTC       &none     &none     &none  BT(0)     /*  */ &none        &none     &none     UG(RGB_EFF) UG(RGB_TOG)
-//+---------+---------+---------+------+---------+/*  */+------------+---------+---------+-----------+-----------+
-   &none     BOOT      &soft_off &none  BT(1)     /*  */ &out OUT_USB &none     &soft_off &none       UG(RGB_BRI)
-//+---------+---------+---------+------+---------+/*  */+------------+---------+---------+-----------+-----------+
-   &none     &none     &none     &none  BT(2)     /*  */ &out OUT_BLE &none     &none     &none       UG(RGB_BRD)
-//+---------+---------+---------+------+---------+/*  */+------------+---------+---------+-----------+-----------+
-                                 &to 0  &kp PSCRN /*  */ &trans       &trans
-                              //================================================
-            >;
-        };
-
-        blank {
-            bindings = <
-&none &none &none &none &none /* */ &none &none &none &none &none
-&none &none &none &none &none /* */ &none &none &none &none &none
-&none &none &none &none &none /* */ &none &none &none &none &none
-                  &none &none /* */ &none &none
-            >;
-        };
-    };
 };
