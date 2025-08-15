@@ -1,0 +1,19 @@
+name: Reviung34
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "**reviung34.*"
+      - "**34.dtsi"
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  build_reviung34:
+    uses: zmkfirmware/zmk/.github/workflows/build-user-config.yml@main
+    secrets: inherit
+    with:
+      build_matrix_path: "build_matrix/reviung34.yaml"
+      archive_name: "zmk_reviung34-${{ github.run_number }}"
