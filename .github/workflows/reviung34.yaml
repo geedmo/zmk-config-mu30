@@ -2,9 +2,6 @@ name: Reviung34
 
 on:
   push:
-    paths:
-      - "**reviung34.*"
-      - "**34.dtsi"
   pull_request:
   workflow_dispatch:
 

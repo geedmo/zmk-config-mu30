@@ -2,8 +2,6 @@ name: settings reset
 
 on:
   push:
-    paths:
-      - "**reset.yaml"
   pull_request:
   workflow_dispatch:
 
