@@ -47,7 +47,7 @@
 #define SC_DELETE_WIN &kp LC(X) &kp N0
 #define SC_FIND_FILE EMACS_LEADER &kp F &kp F
 #define SC_SWOOP EMACS_LEADER &kp S &kp S
-#define SC_SAVE_FILE &kp LC(X) &kp LC(X)
+#define SC_SAVE_FILE &kp LC(X) &kp LC(S)
 #define SC_FIND_BUFFER EMACS_LEADER &kp B &kp B
 #define SC_TOG_BUFFER EMACS_LEADER &kp TAB
 #define SC_CLOSE_BUFFER EMACS_LEADER &kp B &kp D
